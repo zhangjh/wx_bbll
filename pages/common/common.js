@@ -1,8 +1,10 @@
+const debug = true;
+
 const common = {
-  appId: "wx43a5660370f81067",
-  appSecrect: "02917c0f677705707354cce3d145d90b",
+  appId: "",
+  appSecrect: "",
   lvUrlPre: "https://www.louisvuitton.cn/",
-  reqUrlPre: "https://zhangjh.me:5000/bbzs/wx",
+  reqUrlPre: debug ? "http://localhost:5000/bbzs/wx" : "https://zhangjh.me:5000/bbzs/wx",
   funcs: {
     wxNet,
     getProduct,
@@ -23,10 +25,15 @@ function wxNet(body) {
     } : undefined,
     success: res => {
       if(res.statusCode === 200) {
-        if(res.data.success) {
-          body.resolve(res.data);
+        let bizRes = res.data;
+        if(bizRes.success != undefined) {
+          if(bizRes.success) {
+            body.resolve(bizRes.data);
+          } else {
+            body.reject(bizRes.errorMsg);
+          }
         } else {
-          body.reject(res.data.errorMsg);
+          body.resolve(bizRes);
         }
       } else {
         body.reject("网络请求出错:" + res.statusCode);
@@ -45,27 +52,17 @@ function getProduct(userId, cb) {
     params.pageIndex = 1;
     params.pageSize = 20;
   }
-  wx.request({
+  let body = {
     url: common.reqUrlPre + "/getProduct",
     data: params,
-    success: res => {
-      console.log(res);
-      if(res.statusCode === 200) {
-        if(res.data.success) {
-          cb(res.data.data);
-        } else {
-          // 业务查询失败
-          cb();
-        }
-      } else {
-        // 网络请求失败
-      }
+    resolve: res => {
+      cb(res);
     },
-    fail: err => {
-      console.error(err);
-      return [];
+    reject: err => {
+      cb(err);
     }
-  })
+  };
+  common.funcs.wxNet(body);
 }
 
 function addSubscribe(wxId) {
@@ -104,6 +101,9 @@ function addUser(user) {
     method: 'POST',
     resolve: res => {
 
+    },
+    reject: err => {
+
     }
   };
   common.funcs.wxNet(body);
@@ -115,6 +115,9 @@ function getUser(openId, cb) {
     data: {outerId: openId},
     resolve: res => {
       cb(res);
+    },
+    reject: err => {
+
     }
   };
   common.funcs.wxNet(body);

@@ -17,19 +17,24 @@ Page({
     })
   },
   onLoad() {
-    wx.login({
-      timeout: 3000,
-      success: res => {
-        wx.request({
-          url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + common.common.appId +'&secret=' + common.common.appSecrect 
-          + '&js_code=' + res.code + '&grant_type=authorization_code',
-          success: res => {
-            if(res.statusCode === 200) {
-              const openId = res.data.openid;
+  },
+  onShow() {
+    let openId = app.globalData.openId;
+    let userId = undefined;
+    if(!openId) {
+      wx.login({
+        timeout: 3000,
+        success: res => {
+          let body = {
+            url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + common.common.appId +'&secret=' + common.common.appSecrect 
+            + '&js_code=' + res.code + '&grant_type=authorization_code',
+            resolve: res => {
+              const openId = res.openid;
               if(openId) {
                 app.globalData.openId = openId;
                 common.common.funcs.getUser(openId, (user) => {
                   if(user) {
+                    userId = user.id;
                     app.globalData.userInfo = user;
                   } else {
                     wx.getUserInfo({
@@ -45,31 +50,31 @@ Page({
                           gender: userInfo.gender
                         };
                         user.outerId = openId;
+                        user.outerType = 1;
                         common.common.funcs.addUser(user);
                       },
                     })
                   }
                 });
               }
+              common.common.funcs.getProduct(userId, data => {
+                for(var item of data) {
+                  item.thumb = common.common.lvUrlPre + item.thumb;
+                }
+                this.setData({
+                  canIUseGetUserProfile: true,
+                  productList: res ? res : []
+                });
+              });
+            },
+            reject: err => {
+  
             }
-          }
-        })
-      }
-    })
-  },
-  onShow() {
-    let userId = undefined;
-    common.common.funcs.getProduct(userId, (res) => {
-      console.log(res);
-      for(var item of res) {
-        item.thumb = common.common.lvUrlPre + item.thumb;
-      }
-      console.log(res);
-      this.setData({
-        canIUseGetUserProfile: true,
-        productList: res ? res : []
-      });
-    });
+          };
+          common.common.funcs.wxNet(body);
+        }
+      })
+    }
   }
 
 })
