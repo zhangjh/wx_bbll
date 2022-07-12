@@ -1,6 +1,6 @@
 const common = {
-  appId: "wx43a5660370f81067",
-  appSecrect: "02917c0f677705707354cce3d145d90b",
+  appId: "",
+  appSecrect: "",
   lvUrlPre: "https://www.louisvuitton.cn/",
   reqUrlPre: "http://zhangjh.me:5000/bbzs/wx",
   funcs: {
