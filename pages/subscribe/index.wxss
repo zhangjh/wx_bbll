@@ -1,0 +1,36 @@
+/* pages/subscribe/index.wxss */
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.flex-container-row {
+  flex-direction: row;
+}
+
+.flex-container-column {
+  flex-direction: column;
+}
+
+.flex-container-row .block {
+  margin: 0 10px;
+}
+
+
+.donate {
+  z-index: 10;
+  position: fixed;
+  border-radius: 16rpx;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn {
+  color: white;
+  font-weight: 500;
+  font-size: large;
+}

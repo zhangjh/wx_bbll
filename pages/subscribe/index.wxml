@@ -1,0 +1,20 @@
+<!--pages/subscribe/index.wxml-->
+<view class="flex-column" style="display:flex;flex-direction: column;">
+  
+  <view>
+    <image src="/resources/Coffee.png" mode="aspectFit" />
+  </view>
+  <view class="flex flex-container-column">
+    <text class="block">包包来了小程序为您免费提供LV品牌上新信息，极速通知到您\n</text>
+    <text class="block">如果您觉得对您有所帮助，可以赞助我一杯咖啡，以便更好地为您持续服务</text>
+  </view>
+
+  <view class="donate-container">
+      <image class="donate" bindtap="closeDonate" wx:if="{{donatePicShow}}" src="/resources/donate" mode="aspectFit"></image>
+  </view>
+ 
+  <view class="flex flex-container-row flex-view-item">
+    <button class="btn" size="mini" type="primary" bindtap="donate">打赏咖啡</button>
+    <button class="btn" size="mini" type="primary" bindtap="handleSubscribe">直接订阅</button>
+  </view>
+</view>

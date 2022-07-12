@@ -1,0 +1,9 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- <goods-list
+	  wr-class="goods-list-container"
+	  goodsList="{{productList}}"
+	  bind:click=""
+	  bind:addcart=""
+	/> -->
+</view>
