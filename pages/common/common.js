@@ -2,14 +2,42 @@ const common = {
   appId: "",
   appSecrect: "",
   lvUrlPre: "https://www.louisvuitton.cn/",
-  reqUrlPre: "http://zhangjh.me:5000/bbzs/wx",
+  reqUrlPre: "http://localhost:5000/bbzs/wx",
   funcs: {
+    wxNet,
     getProduct,
     addSubscribe,
     addUser,
     getUser
   }
 };
+
+function wxNet(body) {
+  let method = body.method ? body.method : 'get';
+  wx.request({
+    url: body.url,
+    data: body.data,
+    method: method,
+    header: method.toUpperCase() === 'POST' ? {
+      'content-type': 'application/x-www-form-urlencoded'
+    } : undefined,
+    success: res => {
+      if(res.statusCode === 200) {
+        if(res.data.success) {
+          body.resolve(res.data);
+        } else {
+          body.reject(res.data.errorMsg);
+        }
+      } else {
+        body.reject("网络请求出错:" + res.statusCode);
+      }
+    },
+    fail: err => {
+      console.error(err);
+      body.reject(res.errMsg);
+    }
+  });
+}
 
 function getProduct(userId, cb) {
   let params = {};
@@ -40,67 +68,56 @@ function getProduct(userId, cb) {
   })
 }
 
-function addSubscribe(wxId, cb) {
+function addSubscribe(wxId) {
   if(!wxId) {
-    cb({success: false});
+    wx.showModal({
+      content: "订阅失败: 未获取到用户",
+      showCancel: false
+    })
     return;
   }
-  wx.request({
+  let body = {
     url: common.reqUrlPre + "/addSubscribe",
     data: {wxId},
-    success: res => {
-      if(res.statusCode === 200) {
-        if(res.data.success) {
-          cb({
-            success: true
-          });
-        } else {
-          cb({
-            success: false,
-            errorMsg: res.data.errorMsg
-          });
-        }
-      } else {
-        cb({
-          success: false, 
-          errorMsg: res.errMsg
-        });
-      }
+    method: 'post',
+    resolve: (res) => {
+      wx.showModal({
+        content: "订阅成功",
+        showCancel: false
+      })
     },
-    fail: res => {
-      cb({success: false, errMsg: "网络请求出错"});
+    reject: (err) => {
+      wx.showModal({
+        content: "订阅失败:" + err,
+        showCancel: false
+      })
     }
-  })
+  };
+
+  common.funcs.wxNet(body);
 }
 
 function addUser(user) {
-  console.log(user);
-  wx.request({
+  let body = {
     url: common.reqUrlPre + "/addUser",
     data: user,
     method: 'POST',
-    header: {
-      'content-type': 'application/x-www-form-urlencoded'
-    },
-    success: res => {
-      if(res.statusCode === 200) {
+    resolve: res => {
 
-      }
     }
-  })
+  };
+  common.funcs.wxNet(body);
 }
 
 function getUser(openId, cb) {
-  console.log(openId);
-  wx.request({
+  let body = {
     url: common.reqUrlPre + "/getUser",
     data: {outerId: openId},
-    success: res => {
-      if(res.statusCode === 200) {
-        cb(res.data.data);
-      }
+    resolve: res => {
+      cb(res);
     }
-  })
+  };
+  common.funcs.wxNet(body);
 }
 
 module.exports = {

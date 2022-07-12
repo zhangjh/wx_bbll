@@ -67,22 +67,9 @@ Page({
   },
 
   handleSubscribe() {
-    console.log("tap subscribe");
     const openId = app.globalData.openId;
     // 发送订阅请求
-    common.funcs.addSubscribe(openId, (res) => {
-      if(res.success) {
-        wx.showModal({
-          content: "订阅成功",
-          showCancel: false
-        })
-      } else {
-        wx.showModal({
-          content: "订阅失败:" + res.errorMsg,
-          showCancel: false
-        })
-      }
-    });
+    common.funcs.addSubscribe(openId);
   },
 
   donate() {
