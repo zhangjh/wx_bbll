@@ -1,11 +1,13 @@
 // pages/msg/index.js
+const app = getApp();
+const common = require("../common/common");
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    msgList: []
   },
 
   /**
@@ -26,7 +28,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    const openId = app.globalData.openId;
+    common.common.funcs.getMsg(openId, res => {
+      console.log(res);
+      this.setData({
+        msgList: res
+      });
+    }, err => {
+      console.error(err);
+    });
   },
 
   /**
@@ -62,5 +72,25 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  handleMsgTap(e) {
+    console.log(e.currentTarget.dataset.id);
+    const msgId = e.currentTarget.dataset.id;
+    wx.showModal({
+      content: "已读消息后续不再展示",
+      showCancel: false,
+      confirmText: "我已知晓",
+      success: () => {
+        // todo: 记录选项，后续不再弹框
+        console.log(1);
+        // 更新消息已读
+        common.common.funcs.updateMsg(msgId, (res) => {
+          console.log(res);
+        }, err => {
+          console.error(err);
+        });
+      }
+    })
   }
 })

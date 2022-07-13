@@ -1,1 +1,36 @@
 <!--pages/msg/index.wxml-->
+
+<i-cell-group>
+  <i-cell i-class="unread"
+          title="商品标题长长长长长长" 
+          label="商品描述长长长长长长"
+          value="详细信息"
+          is-link
+          url="/pages/index/index"
+          link-type="navigatorTo"
+          bindtap="handleMsgTap"
+          data-id="1"
+          >
+          <i-badge dot>
+            <view class="demo-badge"></view>
+          </i-badge>
+  </i-cell>
+  <i-cell i-class="read"
+          title="商品标题长长长长长长" 
+          label="商品描述长长长长长长"
+          value="详细信息"
+          is-link
+          url="https://zhangjh.me"
+          link-type="redirectTo"
+          >
+  </i-cell>
+  <i-cell i-class="read"
+          title="商品标题长长长长长长" 
+          label="商品描述长长长长长长"
+          value="详细信息"
+          is-link
+          url="https://zhangjh.me"
+          link-type="redirectTo"
+          >
+  </i-cell>
+</i-cell-group>

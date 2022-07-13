@@ -1,1 +1,8 @@
 /* pages/msg/index.wxss */
+.unread {
+  color: black;
+}
+
+.read {
+  color: gray;
+}

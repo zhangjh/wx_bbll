@@ -12,7 +12,9 @@ const common = {
     getProduct,
     addSubscribe,
     addUser,
-    getUser
+    getUser,
+    getMsg,
+    updateMsg
   }
 };
 
@@ -147,6 +149,26 @@ function getUser(openId, cb) {
     reject: err => {
 
     }
+  };
+  common.funcs.wxNet(body);
+}
+
+function getMsg(openId, resolve, reject) {
+  let body = {
+    url: common.reqUrlPre + "/getMsg",
+    data: {outerId: openId},
+    resolve,
+    reject
+  };
+  common.funcs.wxNet(body);
+}
+
+function updateMsg(msgId, resolve, reject) {
+  let body = {
+    url: common.reqUrlPre + "/updateMsgRead",
+    data: {msgId},
+    resolve,
+    reject
   };
   common.funcs.wxNet(body);
 }
