@@ -13,18 +13,24 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "position": "top",
+    "position": "bottom",
     "list": [
       {
         "pagePath": "pages/index/index",
+        "iconPath": "resources/home_icon.png",
+        "selectedIconPath": "resources/home_selected_icon.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/subscribe/index",
+        "iconPath": "resources/subscribe_icon.png",
+        "selectedIconPath": "resources/subscribe_selected_icon.png",
         "text": "订阅"
       },
       {
         "pagePath": "pages/msg/index",
+        "iconPath": "resources/msg_icon.png",
+        "selectedIconPath": "resources/msg_selected_icon.png",
         "text": "消息"
       }
     ]

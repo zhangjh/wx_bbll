@@ -1,12 +1,14 @@
 const debug = true;
 
 const common = {
-  appId: "",
-  appSecrect: "",
+  appId: "wx43a5660370f81067",
+  appSecrect: "02917c0f677705707354cce3d145d90b",
   lvUrlPre: "https://www.louisvuitton.cn/",
   reqUrlPre: debug ? "http://localhost:5000/bbzs/wx" : "https://zhangjh.me:5000/bbzs/wx",
+  tmplId: "f2Nzpjj89iaiOGMNQsdjRmnxIhhgK73VR54380tLuUY",
   funcs: {
     wxNet,
+    wxMsg,
     getProduct,
     addSubscribe,
     addUser,
@@ -44,6 +46,32 @@ function wxNet(body) {
       body.reject(err);
     }
   });
+}
+
+function wxMsg(resolve, reject) {
+  wx.getSetting({
+    withSubscriptions: true,
+    success: res => {
+      console.log(res.authSetting);
+      console.log(res.subscriptionsSetting);
+    },
+    fail: err =>{
+
+    }
+  })
+  wx.requestSubscribeMessage({
+    tmplIds: [common.tmplId],
+    success: res => {
+      if(res.errMsg == "requestSubscribeMessage:ok") {
+        resolve(res[common.tmplId]);
+      } else {
+        reject(res.errMsg);
+      }
+    },
+    fail: err => {
+      reject(err)
+    }
+  })
 }
 
 function getProduct(userId, cb) {

@@ -68,8 +68,15 @@ Page({
 
   handleSubscribe() {
     const openId = app.globalData.openId;
-    // 发送订阅请求
-    common.funcs.addSubscribe(openId);
+    common.funcs.wxMsg((res) => {
+      console.log(res);
+      if(res === "accept") {
+        // 记录订阅请求
+        common.funcs.addSubscribe(openId);
+      }
+    }, err => {
+      console.error(err);
+    });
   },
 
   donate() {
